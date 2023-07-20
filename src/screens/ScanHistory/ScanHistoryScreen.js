@@ -1,22 +1,8 @@
-import React, { useState,useLayoutEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import MenuImage from "../../components/MenuImage/MenuImage";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 
-const ScanHistoryScreen = (props) => {
+const HistoryScreen = (props) => {
   const { navigation } = props;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <MenuImage
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        />
-      ),
-      headerRight: () => <View />,
-    });
-  }, []);
 
   const [scanHistory, setScanHistory] = useState([
     { id: '1', date: '2022-08-15', result: 'Success' },
@@ -26,11 +12,20 @@ const ScanHistoryScreen = (props) => {
     { id: '5', date: '2022-08-11', result: 'Failure' },
   ]);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.scanItem}>
-      <Text style={styles.scanDate}>{item.date}</Text>
-      <Text style={styles.scanResult}>{item.result}</Text>
-    </View>
+  const handleHistoryItemPress = (id) => {
+    // Logic for handling the interaction with the history item
+    console.log('History Item Pressed:', id);
+    navigation.navigate("ScanDetail");
+  };
+
+  const renderHistoryItem = ({ item }) => (
+    <TouchableOpacity
+      style={[styles.historyItem, { backgroundColor: '#63A024' }]}
+      onPress={() => handleHistoryItemPress(item.id)}
+    >
+      <Text style={styles.historyDate}>{item.date}</Text>
+      <Text style={styles.historyResult}>{item.result}</Text>
+    </TouchableOpacity>
   );
 
   return (
@@ -40,8 +35,8 @@ const ScanHistoryScreen = (props) => {
       {scanHistory.length > 0 ? (
         <FlatList
           data={scanHistory}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
+          renderItem={renderHistoryItem}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
         />
       ) : (
@@ -65,18 +60,22 @@ const styles = StyleSheet.create({
   listContainer: {
     flexGrow: 1,
   },
-  scanItem: {
+  historyItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 10,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
+    backgroundColor: '#63A024',
+    borderRadius: 10,
+    marginVertical: 5,
   },
-  scanDate: {
+  historyDate: {
     fontSize: 16,
   },
-  scanResult: {
+  historyResult: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333333',
@@ -87,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScanHistoryScreen;
+export default HistoryScreen;

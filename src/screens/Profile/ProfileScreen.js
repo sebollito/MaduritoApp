@@ -1,8 +1,27 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ProfileScreen = (props) => {
   const { navigation } = props;
+
+  const handleDeleteHistory = () => {
+    // Logic for deleting history
+    console.log('Delete History');
+  };
+
+  const handleUpdatePassword = () => {
+    // Logic for updating password
+    console.log('Update Password');
+    navigation.navigate("ResetPassword");
+
+  };
+
+  const handleLogout = () => {
+    // Logic for logging out
+    console.log('Logout');
+    navigation.navigate("Login");
+
+  };
 
   return (
     <View style={styles.container}>
@@ -11,20 +30,17 @@ const ProfileScreen = (props) => {
       <Text style={styles.name}>John Doe</Text>
       <Text style={styles.email}>johndoe@example.com</Text>
 
-      <View style={styles.infoContainer}>
-        <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>Age:</Text>
-          <Text style={styles.infoValue}>30</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>Location:</Text>
-          <Text style={styles.infoValue}>New York</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>Bio:</Text>
-          <Text style={styles.infoValue}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
-        </View>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={handleDeleteHistory}>
+        <Text style={styles.buttonText}>Delete My History</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleUpdatePassword}>
+        <Text style={styles.buttonText}>Update Password</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -34,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   profilePicture: {
     width: 150,
@@ -50,29 +67,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
-  infoContainer: {
-    backgroundColor: '#ffffff',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  infoItem: {
-    flexDirection: 'row',
+  button: {
+    backgroundColor: '#63A024',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
     marginBottom: 10,
   },
-  infoLabel: {
-    fontWeight: 'bold',
-    marginRight: 10,
-  },
-  infoValue: {
-    flex: 1,
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

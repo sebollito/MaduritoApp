@@ -19,6 +19,8 @@ import ExpoCameraScreen from '../screens/ExpoCamera/ExpoCameraScreen';
 import ScannerScreen from '../screens/Scanner/ScannerScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import ScanHistoryScreen from '../screens/ScanHistory/ScanHistoryScreen';
+import ScanDetailScreen from '../screens/ScanDetail/ScanDetailScreen';
+import CaptureDetailsScreen from '../screens/CaptureDetails/CaptureDetailsScreen';
 
  const Stack = createStackNavigator();
 
@@ -43,6 +45,8 @@ function MainNavigator() {
       <Stack.Screen name='ExpoCamera' component={ExpoCameraScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='ScanHistory' component={ScanHistoryScreen} />
+      <Stack.Screen name='ScanDetail' component={ScanDetailScreen} />
+      <Stack.Screen name='CaptureDetails' component={CaptureDetailsScreen} />
       <Stack.Screen name='Home' component={HomeScreen} />
       <Stack.Screen name='Categories' component={CategoriesScreen}/>
       <Stack.Screen name='Recipe' component={RecipeScreen}/>

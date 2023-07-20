@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect,useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 const LoginScreen = (props) => {
   const { navigation } = props;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailBackground, setEmailBackground] = useState('#B2DB5A');
+  const [passwordBackground, setPasswordBackground] = useState('#B2DB5A');
+  const [loginButtonBackground, setLoginButtonBackground] = useState('#63A024');
 
   const handleLogin = () => {
     // Logic for handling login
     console.log('Email:', email);
     console.log('Password:', password);
-    navigation.navigate("Home");
-
+    navigation.navigate("Scanner");
   };
 
   const handleRegister = () => {
     // Logic for handling registration
     console.log('Register');
     navigation.navigate("Register");
-
   };
 
   const handleForgotPassword = () => {
@@ -30,28 +31,44 @@ const LoginScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Madurito App</Text>
+      {/* App Logo */}
+      <Image source={require('./OG.png')} style={styles.logo} />
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Email"
-          placeholderTextColor="#ffffff"
-          onChangeText={text => setEmail(text)}
-        />
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => setEmailBackground('#B2DB5A')}
+        onPressOut={() => setEmailBackground('#B2DB5A')}
+      >
+        <View style={[styles.inputView, { backgroundColor: emailBackground }]}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Email"
+            placeholderTextColor="#ffffff"
+            onChangeText={text => setEmail(text)}
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Password"
-          placeholderTextColor="#ffffff"
-          secureTextEntry
-          onChangeText={text => setPassword(text)}
-        />
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => setPasswordBackground('#B2DB5A')}
+        onPressOut={() => setPasswordBackground('#B2DB5A')}
+      >
+        <View style={[styles.inputView, { backgroundColor: passwordBackground }]}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Password"
+            placeholderTextColor="#ffffff"
+            secureTextEntry
+            onChangeText={text => setPassword(text)}
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+      <TouchableOpacity
+        style={[styles.loginBtn, { backgroundColor: loginButtonBackground }]}
+        onPress={handleLogin}
+        onPressIn={() => setLoginButtonBackground('#63A024')}
+        onPressOut={() => setLoginButtonBackground('#63A024')}
+      >
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
 
@@ -74,14 +91,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    fontWeight: 'bold',
-    fontSize: 28,
-    color: '#333333',
+    width: 250,
+    height: 250,
+    resizeMode: 'contain',
     marginBottom: 50,
   },
   inputView: {
     width: '80%',
-    backgroundColor: '#333333',
+    backgroundColor: '#B2DB5A',
     borderRadius: 25,
     height: 50,
     marginBottom: 20,
@@ -90,11 +107,11 @@ const styles = StyleSheet.create({
   },
   inputText: {
     height: 50,
-    color: 'white',
+    color: 'white'
   },
   loginBtn: {
     width: '80%',
-    backgroundColor: '#333333',
+    backgroundColor: '#B2DB5A',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',

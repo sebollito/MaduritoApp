@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
@@ -6,11 +6,13 @@ import {
     SafeAreaView,
     StyleSheet,
     Dimensions,
-} from "react-native";
-import { Camera } from "expo-camera";
-import { Video } from "expo-av";
+} from 'react-native';
+import { Camera } from 'expo-camera';
+import { Video } from 'expo-av';
+import CaptureDetailsScreen from '../CaptureDetails/CaptureDetailsScreen'; // Import the new component
+
 export default function ExpoCameraScreen(props) {
-  const { navigation } = props;
+    const { navigation } = props;
 
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -21,7 +23,7 @@ export default function ExpoCameraScreen(props) {
     const cameraRef = useRef();
     useEffect(() => {
         (async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync ();
+            const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === "granted");
         })();
     }, []);
@@ -117,6 +119,13 @@ export default function ExpoCameraScreen(props) {
             />
         </View>
     );
+
+    const [showCaptureDetails, setShowCaptureDetails] = useState(false);
+
+    const handleShowCaptureDetails = () => {
+        setShowCaptureDetails(true);
+    };
+
     if (hasPermission === null) {
         return <View />;
     }
@@ -132,7 +141,7 @@ export default function ExpoCameraScreen(props) {
                 flashMode={Camera.Constants.FlashMode.on}
                 onCameraReady={onCameraReady}
                 onMountError={(error) => {
-                    console.log("camera error", error);
+                    console.log('camera error', error);
                 }}
             />
             <View style={styles.container}>
@@ -141,6 +150,9 @@ export default function ExpoCameraScreen(props) {
                 {isPreview && renderCancelPreviewButton()}
                 {!videoSource && !isPreview && renderCaptureControl()}
             </View>
+
+            {/* Show the CaptureDetailsScreen on top when isPreview is true */}
+            {isPreview && <CaptureDetailsScreen navigation={navigation}/>}
         </SafeAreaView>
     );
 }

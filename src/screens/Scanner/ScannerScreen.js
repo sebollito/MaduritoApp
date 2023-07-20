@@ -22,12 +22,12 @@ const ScannerScreen = (props) => {
     // Logic for scanning
     console.log('Scan');
     navigation.navigate("ExpoCamera");
-
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground source={require('./fruits-background-test.jpg')} style={styles.backgroundImage}>
+        <View style={styles.backgroundOverlay} />
         <TouchableOpacity style={styles.scanButton} onPress={handleScan}>
           <Text style={styles.scanButtonText}>SCAN</Text>
         </TouchableOpacity>
@@ -49,8 +49,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 50% opacity (adjust the alpha value as needed)
+  },
   scanButton: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: '#63A024',
     width: 200,
     height: 200,
     borderRadius: 100,
