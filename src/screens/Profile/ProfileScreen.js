@@ -1,9 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { AuthContext } from '../../context/authContext';
 
 const ProfileScreen = (props) => {
   const { navigation } = props;
+  const { getToken } = useContext(AuthContext);
+  const token = getToken();
 
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    fetch('http://cjoga.dyndns-server.com:5000/me', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // data contains the response from the API
+        setUserData(data);
+      })
+      .catch(error => {
+        console.error('Error:', error.message);
+      });
+  }, []);
+  
   const handleDeleteHistory = () => {
     // Logic for deleting history
     console.log('Delete History');
@@ -27,8 +54,8 @@ const ProfileScreen = (props) => {
     <View style={styles.container}>
       <Image source={require('./profile-picture-test.png')} style={styles.profilePicture} />
 
-      <Text style={styles.name}>John Doe</Text>
-      <Text style={styles.email}>johndoe@example.com</Text>
+      <Text style={styles.name}>{userData.name}</Text>
+      <Text style={styles.email}>{userData.email}</Text>
 
       <TouchableOpacity style={styles.button} onPress={handleDeleteHistory}>
         <Text style={styles.buttonText}>Delete My History</Text>
