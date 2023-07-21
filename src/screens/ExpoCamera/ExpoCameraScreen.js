@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useContext  } from 'react';
 import {
     View,
     Text,
@@ -10,10 +10,12 @@ import {
 import { Camera } from 'expo-camera';
 import { Video } from 'expo-av';
 import CaptureDetailsScreen from '../CaptureDetails/CaptureDetailsScreen'; // Import the new component
+import * as FileSystem from 'expo-file-system';
+import { AuthContext } from '../../context/authContext';
 
 export default function ExpoCameraScreen(props) {
     const { navigation } = props;
-
+    const { getToken } = useContext(AuthContext);
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
     const [isPreview, setIsPreview] = useState(false);
@@ -21,6 +23,8 @@ export default function ExpoCameraScreen(props) {
     const [isVideoRecording, setIsVideoRecording] = useState(false);
     const [videoSource, setVideoSource] = useState(null);
     const cameraRef = useRef();
+
+    
     useEffect(() => {
         (async () => {
             const { status } = await Camera.requestCameraPermissionsAsync();
@@ -30,15 +34,57 @@ export default function ExpoCameraScreen(props) {
     const onCameraReady = () => {
         setIsCameraReady(true);
     };
+    
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true, skipProcessing: true };
             const data = await cameraRef.current.takePictureAsync(options);
             const source = data.uri;
+            const token = getToken();   
+
+            let uriParts = source.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+
             if (source) {
                 await cameraRef.current.pausePreview();
                 setIsPreview(true);
-                console.log("picture", source);
+                console.log("picture", source);//TO-DO imagen capturada
+                
+                // Convert the image to base64 data
+                const base64Image = await FileSystem.readAsStringAsync(source, {
+                    encoding: FileSystem.EncodingType.Base64,
+                });
+    
+                // Prepare the form data to send in the request
+                const formData = new FormData();
+                formData.append('file', {
+                    uri: source,
+                    name: `photo.${fileType}`,
+                    type: `image/${fileType}`,
+                  });
+
+                // http://cjoga.dyndns-server.com:5000
+                // Make the API request
+                fetch('http://cjoga.dyndns-server.com:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Replace with your access token if needed
+                    },
+                    body: formData,
+                })
+                .then((response) => {
+                    console.log("response",response);
+                    console.log("response.json",response.json());
+                    response.json()})
+                .then((data) => {
+                        // Handle the API response here
+                        console.log('API Response:', data);
+                        console.log("token",token);
+
+                    })
+                    .catch((error) => {
+                        console.error('API Error:', error);
+                    });
             }
         }
     };

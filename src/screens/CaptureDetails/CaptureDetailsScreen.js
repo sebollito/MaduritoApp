@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { AuthContext } from '../../context/authContext';
 
 const CaptureDetailsScreen = (props) => {
   const { navigation } = props;
+  const { getToken } = useContext(AuthContext);
+  const token = getToken();   
 
   const handleNotRipe = () => {
     // Logic for handling "Not Ripe Enough" button press

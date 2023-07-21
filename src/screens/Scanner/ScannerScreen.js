@@ -4,7 +4,7 @@ import MenuImage from "../../components/MenuImage/MenuImage";
 
 const ScannerScreen = (props) => {
   const { navigation } = props;
-
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
